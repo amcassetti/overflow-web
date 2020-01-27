@@ -1,9 +1,7 @@
 import React from 'react';
 import { createStore, withStore } from '@spyna/react-store'
 
-import NavContainer from './containers/NavContainer'
 import DepositContainer from './containers/DepositContainer'
-
 
 import theme from './theme/theme'
 import classNames from 'classnames'
@@ -15,7 +13,17 @@ import Grid from '@material-ui/core/Grid'
 const styles = () => ({})
 
 const initialState = {
-    unfinishedTrades: []
+    transactions: [],
+    selectedTab: 'stream',
+    activeStreamView: 'start',
+    activeMonitorView: 'search',
+    adapterAddress: '0x602212F2075bB6F4E50ccD89495c2463E0734C26',
+    // new stream
+    amount: '',
+    address: '',
+    duration: '',
+    // monitoring
+    selectedStreamId: ''
 }
 
 class App extends React.Component {
@@ -32,7 +40,6 @@ class App extends React.Component {
         return (
             <ThemeProvider theme={theme}>
                 <Container maxWidth="sm">
-                    <NavContainer />
                     <DepositContainer />
                 </Container>
             </ThemeProvider>

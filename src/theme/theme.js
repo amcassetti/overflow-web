@@ -5,13 +5,18 @@ import grey from '@material-ui/core/colors/grey';
 export default createMuiTheme({
     palette: {
         primary: {
+            light: '#35afea',
+            main: '#039BE5',
+            dark: '#026ca0',
+            contrastText: '#fff',
+        },
+        secondary: {
             light: '#000',
             main: '#000',
             dark: '#000',
             contrastText: '#fff',
-        },
+        }
         // primary: blueGrey,
-        secondary: grey,
     },
     overrides: {
         // Style sheet name ⚛️
