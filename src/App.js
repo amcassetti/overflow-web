@@ -13,9 +13,17 @@ import Grid from '@material-ui/core/Grid'
 const styles = () => ({})
 
 const initialState = {
-    unfinishedTrades: [],
+    transactions: [],
     selectedTab: 'stream',
-    activeStreamView: 'start'
+    activeStreamView: 'start',
+    activeMonitorView: 'search',
+    adapterAddress: '0x602212F2075bB6F4E50ccD89495c2463E0734C26',
+    // new stream
+    amount: '',
+    address: '',
+    duration: '',
+    // monitoring
+    selectedStreamId: ''
 }
 
 class App extends React.Component {

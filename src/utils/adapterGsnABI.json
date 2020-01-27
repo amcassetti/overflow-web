@@ -1,5 +1,111 @@
 [
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "_beneficiary",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_startTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_duration",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "_nHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_sig",
+				"type": "bytes"
+			}
+		],
+		"name": "addVestingSchedule",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "_to",
+				"type": "bytes"
+			}
+		],
+		"name": "claim",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "context",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "actualCharge",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "preRetVal",
+				"type": "bytes32"
+			}
+		],
+		"name": "postRelayedCall",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "context",
+				"type": "bytes"
+			}
+		],
+		"name": "preRelayedCall",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "contract ShifterRegistry",
@@ -10,25 +116,6 @@
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -116,46 +203,6 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "_beneficiary",
-				"type": "bytes"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_startTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_duration",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "_nHash",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_sig",
-				"type": "bytes"
-			}
-		],
-		"name": "addVestingSchedule",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -182,21 +229,6 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "_to",
-				"type": "bytes"
-			}
-		],
-		"name": "claim",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [],
 		"name": "getHubAddr",
@@ -214,82 +246,16 @@
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "isOwner",
+		"name": "latestScheduleId",
 		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "context",
-				"type": "bytes"
-			},
-			{
-				"internalType": "bool",
-				"name": "success",
-				"type": "bool"
-			},
 			{
 				"internalType": "uint256",
-				"name": "actualCharge",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "preRetVal",
-				"type": "bytes32"
-			}
-		],
-		"name": "postRelayedCall",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "context",
-				"type": "bytes"
-			}
-		],
-		"name": "preRelayedCall",
-		"outputs": [
-			{
-				"internalType": "bytes32",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -323,15 +289,6 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -342,6 +299,11 @@
 		],
 		"name": "schedules",
 		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
 			{
 				"internalType": "uint256",
 				"name": "startTime",
@@ -373,18 +335,24 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "transferOwnership",
-		"outputs": [],
+		"name": "schedulesToBeneficiaries",
+		"outputs": [
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

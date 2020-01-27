@@ -1,8 +1,8 @@
 import RenJS from "@renproject/ren";
 import adapterABI from './adapterGsnABI.json'
 
-const API_URL = ''
-// const API_URL = 'http://localhost:3000'
+// const API_URL = ''
+const API_URL = 'http://localhost:3000'
 let swapMonitor = null
 
 export const addTx = (store, tx) => {
@@ -57,8 +57,10 @@ export const completeDeposit = async function(tx) {
     updateTx(store, Object.assign(tx, { awaiting: 'eth-settle' }))
 
     try {
-        const result = await adapterContract.methods.shiftInWithSwap(
+        const result = await adapterContract.methods.addVestingSchedule(
             params.contractParams[0].value,
+            params.contractParams[1].value,
+            params.contractParams[2].value,
             params.sendAmount,
             renResponse.args.nhash,
             renSignature
@@ -74,9 +76,18 @@ export const completeDeposit = async function(tx) {
 }
 
 export const initShiftIn = function(tx) {
-    const { amount, renBtcAddress, params, ethSig, destAddress } = tx
+    const {
+        amount,
+        renBtcAddress,
+        params,
+        ethSig,
+        destAddress,
+        startTime,
+        duration
+    } = tx
     const {
         sdk,
+        web3,
         adapterAddress
     } = this.props.store.getState()
 
@@ -86,29 +97,51 @@ export const initShiftIn = function(tx) {
         shiftIn = sdk.shiftIn({
             messageID: ethSig.messageID,
             sendTo: adapterAddress,
-            contractFn: "shiftInWithSwap",
+            contractFn: "addVestingSchedule",
             contractParams: [
                 {
-                    name: "_to",
-                    type: "address",
+                    name: "_beneficiary",
+                    type: "bytes",
                     value: destAddress,
+                },
+                {
+                    name: "_startTime",
+                    type: "uint256",
+                    value: startTime,
+                },
+                {
+                    name: "_duration",
+                    type: "uint16",
+                    value: duration,
                 }
-            ],
+            ]
         });
     } else {
         let data = {
             sendToken: RenJS.Tokens.BTC.Btc2Eth,
             sendAmount: Math.floor(amount * (10 ** 8)), // Convert to Satoshis
             sendTo: adapterAddress,
-            contractFn: "shiftInWithSwap",
+            contractFn: "addVestingSchedule",
             contractParams: [
                 {
-                    name: "_to",
-                    type: "address",
-                    value: destAddress,
+                    name: "_beneficiary",
+                    type: "bytes",
+                    value: web3.utils.fromAscii(destAddress),
+                },
+                {
+                    name: "_startTime",
+                    type: "uint256",
+                    value: startTime,
+                },
+                {
+                    name: "_duration",
+                    type: "uint16",
+                    value: duration,
                 }
-            ],
+            ]
         }
+
+        console.log(data)
 
         if (params && params.nonce) {
             data.nonce = params.nonce
@@ -221,11 +254,56 @@ export const initInstantMonitoring = function() {
     }, 1000)
 }
 
+export const updateStreamInfo = async function(tx) {
+    const { store } =  this.props
+    const web3 = store.get('web3')
+    const adapterAddress = store.get('adapterAddress')
+
+    const adapterContract = new web3.eth.Contract(adapterABI, adapterAddress)
+    const dest = tx.params.contractParams[0].value
+
+    const schedule = await adapterContract.methods.schedules(dest).call()
+    console.log(adapterContract, schedule)
+
+    updateTx(store, Object.assign(tx, {
+        schedule
+    }))
+}
+
+export const claim = async function(tx) {
+    const { store }  = this.props
+    const web3 = store.get('web3')
+    const web3Context = store.get('web3Context')
+
+    const adapterAddress = store.get('adapterAddress')
+    const { params } = tx
+
+    const adapterContract = new web3.eth.Contract(adapterABI, adapterAddress)
+
+    console.log('claiming tx', tx)
+
+    try {
+        const result = await adapterContract.methods.claim(
+            params.contractParams[0].value
+        ).send({
+            from: web3Context.accounts[0]
+        })
+        console.log('result', result)
+        updateStreamInfo.bind(this)(tx)
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+
 export const initMonitoring = function() {
     const transactions = this.props.store.get('transactions')
-    const pending = transactions.filter(t => (t.awaiting))
-    pending.map(p => {
-        initDeposit.bind(this)(p)
+    transactions.map(t => {
+        if (t.awaiting) {
+            initDeposit.bind(this)(t)
+        } else {
+            updateStreamInfo.bind(this)(t)
+        }
     })
 }
 
