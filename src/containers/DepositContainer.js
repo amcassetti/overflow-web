@@ -333,7 +333,9 @@ class DepositContainer extends React.Component {
             store.set('selectedStreamId', tx.id)
             store.set('activeStreamView', 'awaiting-init')
             setTimeout(() => {
-                this.initAddressRef.current.value = tx.renBtcAddress
+                if (this.initAddressRef.current) {
+                  this.initAddressRef.current.value = tx.renBtcAddress
+                }
             }, 10)
         } else {
             store.set('selectedTab', 'monitor')
